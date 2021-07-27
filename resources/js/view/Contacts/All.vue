@@ -17,7 +17,7 @@
                 <td>{{ contact.id }}</td>
                 <td>{{ contact.name }}</td>
                 <td>{{ contact.email }}</td>
-                <td>{{ contact.phone_number }}</td>
+                <td>{{ contact.phone }}</td>
                 <td>
                     <div class="btn-group" role="group">
                         <router-link :to="{name: 'edit', params: { id: contact.id }}" class="btn btn-primary">Edit
