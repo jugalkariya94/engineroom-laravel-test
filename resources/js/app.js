@@ -19,7 +19,19 @@ window.Vue = require('vue').default;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+import Vue from 'vue'
+import App from './App.vue';
+import VueRouter from 'vue-router';
+import VueAxios from 'vue-axios';
+
+import router from './routes'
+import store from './store'
+
+Vue.use(VueAxios, axios);
+
+Vue.config.productionTip = false
+
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,4 +41,24 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    router,
+    store,
+    created () {
+        const userInfo = localStorage.getItem('user')
+        if (userInfo) {
+            const userData = JSON.parse(userInfo)
+            this.$store.commit('setUserData', userData)
+        }
+        axios.interceptors.response.use(
+            response => response,
+            error => {
+                if (error.response.status === 401) {
+                    this.$store.dispatch('logout')
+                }
+                return Promise.reject(error)
+            }
+        )
+    },
+    render: h => h(App),
 });
+
